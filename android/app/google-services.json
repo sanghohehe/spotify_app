@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "115909101287",
+    "project_id": "spotify-app-1410",
+    "storage_bucket": "spotify-app-1410.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115909101287:android:f1d9584431a46c669e4442",
+        "android_client_info": {
+          "package_name": "com.example.taxi_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg7FmDJQPU3eqP-Ix9gKeBtim_98GPqpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
