@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taxi_app/common/widgets/appbar/app_bar.dart';
+import 'package:taxi_app/common/widgets/favorite_button/favorite_button.dart';
 import 'package:taxi_app/core/configs/theme/app_colors.dart';
 import 'package:taxi_app/domain/entities/song/song.dart';
 import 'package:taxi_app/presentation/song_player/bloc/song_player_cubit.dart';
@@ -76,14 +77,7 @@ class SongPlayerPage extends StatelessWidget {
             ),
           ],
         ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.favorite_outline_outlined,
-            size: 35,
-            color: AppColors.darkGrey,
-          ),
-        ),
+        FavoriteButton(songEntity: songEntity),
       ],
     );
   }

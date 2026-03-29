@@ -7,6 +7,7 @@ import 'package:taxi_app/core/configs/assets/app_vectors.dart';
 import 'package:taxi_app/core/configs/theme/app_colors.dart';
 import 'package:taxi_app/presentation/home/widgets/news_songs.dart';
 import 'package:taxi_app/presentation/home/widgets/play_list.dart';
+import 'package:taxi_app/presentation/profile/pages/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,6 +30,18 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BasicAppBar(
+        hideBack: true,
+        action: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => ProfilePage(),
+              ),
+            );
+          },
+          icon: Icon(Icons.person),
+        ),
         title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40),
       ),
       body: SingleChildScrollView(

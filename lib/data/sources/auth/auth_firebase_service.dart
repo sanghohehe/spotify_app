@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:taxi_app/data/model/auth/create_user_req.dart';
 import 'package:taxi_app/data/model/auth/sigin_user_req.dart';
+import 'package:taxi_app/data/model/auth/user.dart';
+import 'package:taxi_app/domain/entities/auth/user.dart';
 
 abstract class AuthFirebaseService {
   Future<Either> signup(CreateUserReq createUsserReq);
   Future<Either> signin(SigninUserReq signinUserReq);
+  Future<Either> getUser();
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -54,6 +58,24 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       }
 
       return Left(message);
+    }
+  }
+
+  @override
+  Future<Either> getUser() async {
+    try {
+      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      var user =
+          await firebaseFirestore
+              .collection('Users')
+              .doc(firebaseAuth.currentUser?.uid)
+              .get();
+      UserModel userModel = UserModel.fromJson(user.data()!);
+      userModel.imageUrl = firebaseAuth.currentUser?.photoURL;
+      return Right(UserEntity);
+    } catch (e) {
+      return Left('An error occurred while fetching user data');
     }
   }
 }
