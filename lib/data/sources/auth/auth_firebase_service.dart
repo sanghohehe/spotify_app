@@ -1,25 +1,59 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:taxi_app/data/model/auth/create_user_req.dart';
+import 'package:taxi_app/data/model/auth/sigin_user_req.dart';
 
 abstract class AuthFirebaseService {
-  Future<void> signup(CreateUserReq createUsserReq);
-  Future<void> signin();
+  Future<Either> signup(CreateUserReq createUsserReq);
+  Future<Either> signin(SigninUserReq signinUserReq);
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
-  Future<void> signin() {
-    // TODO: implement signin
-    throw UnimplementedError();
+  Future<Either> signin(SigninUserReq signinUserReq) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: signinUserReq.email,
+        password: signinUserReq.password,
+      );
+      return Right('SignIn was success');
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+
+      if (e.code == 'Invalid-email') {
+        message = 'Not user found for that email';
+      } else if (e.code == 'Invalid-credential') {
+        message = 'Wrong password provided for that user';
+      }
+
+      return Left(message);
+    }
   }
 
   @override
-  Future<void> signup(CreateUserReq createUsserReq) async {
+  Future<Either> signup(CreateUserReq createUsserReq) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      var data = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: createUsserReq.email,
         password: createUsserReq.password,
       );
-    } on FirebaseAuthException catch (e) {}
+
+      FirebaseFirestore.instance.collection('Users').doc(data.user?.uid).set({
+        'name': createUsserReq.fullName,
+        'email': data.user?.email,
+      });
+      return Right('Signup was success');
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+
+      if (e.code == 'weak-password') {
+        message = 'The password provide is too weak';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'An account already exits with that email.';
+      }
+
+      return Left(message);
+    }
   }
 }

@@ -20,7 +20,10 @@ dependencies:
   path_provider:
   firebase_core:
   firebase_auth:
+  dartz:
   get_it:
+  cloud_firestore: 
+  just_audio:
 dev_dependencies:
   flutter_test:
     sdk: flutter
