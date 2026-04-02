@@ -62,19 +62,28 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either> getUser() async {
+  Future<Either<String, UserEntity>> getUser() async {
     try {
       FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-      var user =
+
+      var userDoc =
           await firebaseFirestore
               .collection('Users')
               .doc(firebaseAuth.currentUser?.uid)
               .get();
-      UserModel userModel = UserModel.fromJson(user.data()!);
+
+      if (userDoc.data() == null) {
+        return Left('User data is null');
+      }
+
+      UserModel userModel = UserModel.fromJson(userDoc.data()!);
+
       userModel.imageUrl = firebaseAuth.currentUser?.photoURL;
-      return Right(UserEntity);
+
+      return Right(userModel.toEntity());
     } catch (e) {
+      print("GET USER ERROR: $e");
       return Left('An error occurred while fetching user data');
     }
   }
