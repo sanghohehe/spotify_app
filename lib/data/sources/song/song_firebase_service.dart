@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get_it/get_it.dart';
 import 'package:taxi_app/data/model/song/song.dart';
 import 'package:taxi_app/domain/entities/song/song.dart';
 import 'package:taxi_app/domain/usecases/song/is_favorite_song.dart';
@@ -153,7 +152,6 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
         favoriteSongs.add(songModel.toEntity());
       }
       return Right(favoriteSongs);
-
     } catch (e) {
       return Left('An error occurred');
     }
